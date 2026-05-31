@@ -16,13 +16,26 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.13.1 # Fully supports Dart 3+
+  flutter_launcher_icons: ^0.14.1
+  flutter_native_splash: ^2.4.0
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
   image_path: "assets/icons/app_icon.png"
   min_sdk_android: 21
 
+flutter_native_splash:
+  color: "#FFC20E"
+  image: "assets/icons/app_logo.png"
+
+  android_12:
+    color: "#FFC20E"
+    image: "assets/icons/app_logo.png"
+  fullscreen: true
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
