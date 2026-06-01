@@ -11,13 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.4.0
+  google_fonts: ^6.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.1
-  flutter_native_splash: ^2.4.0
 
 flutter_launcher_icons:
   android: true
@@ -27,11 +28,17 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#FFC20E"
-  image: "assets/icons/app_logo.png"
+  image: "assets/icons/splash_logo.png"
+
+  # Corrected positioning parameter keys:
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
 
   android_12:
     color: "#FFC20E"
-    image: "assets/icons/app_logo.png"
+    image: "assets/icons/splash_logo.png"
+    icon_background_color: "#FFC20E"
+
   fullscreen: true
 
 flutter:
