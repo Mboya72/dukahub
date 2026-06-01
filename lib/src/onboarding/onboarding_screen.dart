@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: 48,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: textSecondaryColor.withOpacity(0.2),
+                      color: textSecondaryColor.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(2.5),
                     ),
                   ),
@@ -168,7 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0F172A).withOpacity(0.03),
+              color: const Color(0xFF0F172A).withValues(alpha:0.03),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -180,7 +180,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.15),
+                color: accentColor.withValues(alpha:0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: accentColor == Colors.white ? textColor : accentColor, size: 26),
@@ -210,7 +210,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded, color: subTextColor.withOpacity(0.6)),
+            Icon(Icons.chevron_right_rounded, color: subTextColor.withValues(alpha:0.6)),
           ],
         ),
       ),
