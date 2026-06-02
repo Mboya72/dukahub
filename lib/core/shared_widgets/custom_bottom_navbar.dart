@@ -15,62 +15,61 @@ class CustomBottomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.all(8),
       height: 72,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(36),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryDark.withValues(alpha: 0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildDockItem(0, Icons.home_filled, 'Home'),
-          _buildDockItem(1, Icons.shopping_basket_outlined, 'Shops'),
-          _buildDockItem(2, Icons.description_outlined, 'Ledgers'),
-          _buildDockItem(3, Icons.chat_bubble_outline_rounded, 'Chats'),
-          _buildDockItem(4, Icons.person_outline_rounded, 'Profile'),
+          _buildItem(0, Icons.home_outlined, 'Home'),
+          _buildItem(1, Icons.shopping_basket_outlined, 'Shop'),
+          _buildItem(2, Icons.description_outlined, 'Records'),
+          _buildItem(3, Icons.chat_bubble_outline_rounded, 'Chats'),
+          _buildItem(4, Icons.person_outline_rounded, 'Profile'),
         ],
       ),
     );
   }
 
-  Widget _buildDockItem(int index, IconData icon, String label) {
+  Widget _buildItem(int index, IconData icon, String label) {
     final bool isSelected = currentIndex == index;
-    return GestureDetector(
-      onTap: () => onTap(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? AppTheme.accentYellow : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: AppTheme.primaryDark,
-              size: 24,
-            ),
-            if (isSelected) ...[
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: AppTheme.primaryDark,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+
+    return Expanded(
+      flex: isSelected ? 2 : 1,
+      child: GestureDetector(
+        onTap: () => onTap(index),
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            color: isSelected ? AppTheme.accentYellow : Colors.transparent,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: AppTheme.primaryDark,
+                size: 24,
               ),
-            ]
-          ],
+              if (isSelected) ...[
+                const SizedBox(width: 6),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: AppTheme.primaryDark,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
