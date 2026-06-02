@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../auth/login_screen.dart';
+import '../auth/signup_screen.dart';
+import '../theme/app_theme.dart'; // Points directly to your single theme file workspace
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -18,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'image': 'assets/images/WelcomeScreen.png',
       'title': 'One Record,\nZero Disputes',
-      'description': 'Digitize your Ledger so everyone stays on the same page, with zero \'he-said-she-said\' at the counter.',
+      'description': "Digitize your Ledger so everyone stays on the same page, with zero 'he-said-she-said' at the counter.",
     },
     {
       'image': 'assets/images/WelcomeScreen2.png',
@@ -28,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'image': 'assets/images/WelcomeScreen3.png',
       'title': 'Your Local Shop,\nDigitized',
-      'description': 'Turn your neighborhood "Duka" into a digital storefront where customers can see what\'s in stock before they even arrive.',
+      'description': "Turn your neighborhood \"Duka\" into a digital storefront where customers can see what's in stock before they even arrive.",
     },
   ];
 
@@ -49,10 +51,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // Beautifully opens a custom, premium role selector frame
   void _showRoleSelectionPopup(BuildContext context) {
-    const Color textPrimaryColor = Color(0xFF032231);
-    const Color textSecondaryColor = Color(0xFF2C3E50);
-    const Color accentYellow = Color(0xFFFFC20E);
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -79,26 +77,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: 48,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: textSecondaryColor.withValues(alpha: 0.2),
+                      color: AppTheme.primaryDark.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(2.5),
                     ),
                   ),
                 ),
                 const SizedBox(height: 32),
-                Text(
+                const Text(
                   'Choose Your Account Type',
-                  style: GoogleFonts.urbanist(
-                    color: textPrimaryColor,
+                  style: TextStyle(
+                    color: AppTheme.primaryDark,
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   'Select how you intend to use DukaHub to continue.',
-                  style: GoogleFonts.urbanist(
-                    color: textSecondaryColor,
+                  style: TextStyle(
+                    color: AppTheme.primaryDark,
                     fontSize: 15,
                   ),
                 ),
@@ -110,28 +108,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   title: 'I am a Shopkeeper',
                   subtitle: 'Manage debts (Daftari), track stock, and send automated client reminders.',
                   icon: Icons.storefront_rounded,
-                  accentColor: accentYellow,
-                  textColor: textPrimaryColor,
-                  subTextColor: textSecondaryColor,
+                  accentColor: AppTheme.accentYellow,
+                  textColor: AppTheme.primaryDark,
+                  subTextColor: AppTheme.primaryDark,
                   onTap: () {
-                    Navigator.pop(context);
-                    debugPrint('Route Selected: Shopkeeper Auth Workspace');
+                    Navigator.pop(context); // Close the bottom sheet modal popup
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(selectedRole: 'Shopkeeper'),
+                      ),
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // Customer Profile Mode Card Item
+// Customer Profile Mode Card Item
                 _buildRoleCard(
                   context: context,
                   title: 'I am a Customer',
                   subtitle: 'Track your personal store credits, orders, and view local inventory layouts.',
                   icon: Icons.shopping_bag_rounded,
-                  accentColor: textPrimaryColor,
-                  textColor: textPrimaryColor,
-                  subTextColor: textSecondaryColor,
+                  accentColor: AppTheme.primaryDark,
+                  textColor: AppTheme.primaryDark,
+                  subTextColor: AppTheme.primaryDark,
                   onTap: () {
-                    Navigator.pop(context);
-                    debugPrint('Route Selected: Customer Auth Workspace');
+                    Navigator.pop(context); // Close the bottom sheet modal popup
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(selectedRole: 'Customer'),
+                      ),
+                    );
                   },
                 ),
                 const SizedBox(height: 12),
@@ -168,7 +174,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0F172A).withValues(alpha:0.03),
+              color: const Color(0xFF0F172A).withValues(alpha: 0.03),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -180,7 +186,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: accentColor.withValues(alpha:0.15),
+                color: accentColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: accentColor == Colors.white ? textColor : accentColor, size: 26),
@@ -192,7 +198,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.urbanist(
+                    style: TextStyle(
                       color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -201,8 +207,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.urbanist(
-                      color: subTextColor,
+                    style: TextStyle(
+                      color: subTextColor.withValues(alpha: 0.7),
                       fontSize: 13,
                       height: 1.3,
                     ),
@@ -210,7 +216,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded, color: subTextColor.withValues(alpha:0.6)),
+            Icon(Icons.chevron_right_rounded, color: subTextColor.withValues(alpha: 0.6)),
           ],
         ),
       ),
@@ -225,13 +231,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundCanvas = Color(0xFFEAEFF2);
-    const Color textPrimaryColor = Color(0xFF032231);
-    const Color textSecondaryColor = Color(0xFF2C3E50);
-    const Color accentYellow = Color(0xFFFFC20E);
-
     return Scaffold(
-      backgroundColor: backgroundCanvas,
+      backgroundColor: AppTheme.background,
       body: SafeArea(
         top: false,
         child: Column(
@@ -266,8 +267,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             children: [
                               Text(
                                 item['title']!,
-                                style: GoogleFonts.urbanist(
-                                  color: textPrimaryColor,
+                                style: const TextStyle(
+                                  color: AppTheme.primaryDark,
                                   fontSize: 42,
                                   fontWeight: FontWeight.bold,
                                   height: 1.1,
@@ -277,8 +278,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               const SizedBox(height: 20),
                               Text(
                                 item['description']!,
-                                style: GoogleFonts.urbanist(
-                                  color: textSecondaryColor,
+                                style: const TextStyle(
+                                  color: AppTheme.primaryDark,
                                   fontSize: 16,
                                   height: 1.4,
                                   fontWeight: FontWeight.w400,
@@ -305,38 +306,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () => _showRoleSelectionPopup(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: accentYellow,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-                      ),
-                      child: Text(
-                        'Get Started',
-                        style: GoogleFonts.urbanist(
-                          color: textPrimaryColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: const Text('Get Started'),
                     ),
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () => _showRoleSelectionPopup(context),
+                    onTap: () {
+                      // Completely bypasses role popup selection rules and opens the login frame directly
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const LoginScreen(selectedRole: '',)),
+                      );
+                    },
                     child: RichText(
                       text: TextSpan(
-                        style: GoogleFonts.urbanist(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: textSecondaryColor,
+                          color: AppTheme.primaryDark,
+                          fontFamily: 'Urbanist',
                         ),
                         children: [
-                          const TextSpan(text: 'You have an Account? '),
+                          TextSpan(text: 'You have an Account? '),
                           TextSpan(
                             text: 'Login',
-                            style: GoogleFonts.urbanist(
-                              color: textPrimaryColor,
+                            style: TextStyle(
+                              color: AppTheme.primaryDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -347,14 +340,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               )
                   : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Verified standard enum syntax
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
                     onTap: () => _showRoleSelectionPopup(context),
-                    child: Text(
+                    child: const Text(
                       'Skip',
-                      style: GoogleFonts.urbanist(
-                        color: textSecondaryColor,
+                      style: TextStyle(
+                        color: AppTheme.primaryDark,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -366,12 +359,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       width: 56,
                       height: 56,
                       decoration: const BoxDecoration(
-                        color: accentYellow,
+                        color: AppTheme.accentYellow,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.arrow_forward,
-                        color: textPrimaryColor,
+                        color: AppTheme.primaryDark,
                         size: 26,
                       ),
                     ),

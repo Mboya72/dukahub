@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'auth_themes.dart';
+import '../theme/app_theme.dart'; // Points directly to your single theme file workspace
 
 // =========================================================================
 // Step 1: Request Reset Screen (Matches layout reference: reset password1.png)
@@ -11,7 +10,6 @@ class RequestResetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -21,28 +19,32 @@ class RequestResetScreen extends StatelessWidget {
               const SizedBox(height: 60),
               Text(
                 'Reset\nPassword',
-                style: GoogleFonts.urbanist(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: kPrimaryDark,
-                  height: 1.1,
-                  letterSpacing: -1,
-                ),
+                // Uses the massive custom local variable typography mapping
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 80),
 
-              buildLabel('Email / Phone Number'),
-              TextField(decoration: customInputDecoration('Email / Phone Number')),
+              AppTheme.buildLabel('Email / Phone Number'),
+              const TextField(
+                decoration: InputDecoration(hintText: 'Email / Phone Number'),
+              ),
 
               const SizedBox(height: 60),
-              buildMainButton('Send Code', () {
-                // Navigate to next step: VerifyCodeScreen
-              }),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to next step: VerifyCodeScreen
+                },
+                child: const Text('Send Code'),
+              ),
 
               const Spacer(),
-              buildBottomSwitch("Remember your password?", "Login", () {
-                // Return to login screen
-              }),
+              AppTheme.buildBottomSwitch(
+                "Remember your password?",
+                "Login",
+                    () {
+                  // Return to login screen
+                },
+              ),
               const SizedBox(height: 20),
             ],
           ),
@@ -61,7 +63,6 @@ class VerifyCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -71,26 +72,23 @@ class VerifyCodeScreen extends StatelessWidget {
               const SizedBox(height: 60),
               Text(
                 'Enter\nCode',
-                style: GoogleFonts.urbanist(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: kPrimaryDark,
-                  height: 1.1,
-                  letterSpacing: -1,
-                ),
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 80),
 
-              buildLabel('Code'),
-              TextField(
+              AppTheme.buildLabel('Code'),
+              const TextField(
                 keyboardType: TextInputType.number,
-                decoration: customInputDecoration('Code'),
+                decoration: InputDecoration(hintText: 'Code'),
               ),
 
               const SizedBox(height: 60),
-              buildMainButton('Verify Code', () {
-                // Navigate to next step: SetNewPasswordScreen
-              }),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to next step: SetNewPasswordScreen
+                },
+                child: const Text('Verify Code'),
+              ),
               const Spacer(),
             ],
           ),
@@ -109,7 +107,6 @@ class SetNewPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -119,27 +116,30 @@ class SetNewPasswordScreen extends StatelessWidget {
               const SizedBox(height: 60),
               Text(
                 'Change\nPassword',
-                style: GoogleFonts.urbanist(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: kPrimaryDark,
-                  height: 1.1,
-                  letterSpacing: -1,
-                ),
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 60),
 
-              buildLabel('Change Password'),
-              TextField(obscureText: true, decoration: customInputDecoration('Password')),
+              AppTheme.buildLabel('Change Password'),
+              const TextField(
+                obscureText: true,
+                decoration: InputDecoration(hintText: 'Password'),
+              ),
 
               const SizedBox(height: 20),
-              buildLabel('Confirm Password'),
-              TextField(obscureText: true, decoration: customInputDecoration('Confirm Password')),
+              AppTheme.buildLabel('Confirm Password'),
+              const TextField(
+                obscureText: true,
+                decoration: InputDecoration(hintText: 'Confirm Password'),
+              ),
 
               const SizedBox(height: 60),
-              buildMainButton('Change Password', () {
-                // Execute password update action
-              }),
+              ElevatedButton(
+                onPressed: () {
+                  // Execute password update action
+                },
+                child: const Text('Change Password'),
+              ),
               const Spacer(),
             ],
           ),
