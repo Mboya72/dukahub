@@ -10,9 +10,12 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
-  int _currentBottomNavIndex = 0;
   bool _showBalance = true;
   bool _showDebt = true;
+
+  // Since this component is now a standalone screen destination driven by
+  // named routes, the selected index on this file is always explicitly 0 (Home).
+  final int _currentBottomNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,30 +29,47 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             children: [
               const SizedBox(height: 24),
 
-              // 1. Updated Profile Header with Circle Avatar matching "Customer Homescreen_2.png"
+              // 1. Profile Header with Image Asset Safety Fallback
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     children: [
-                      // Circular Profile Photo Asset Layout
+                      // Circular Profile Avatar Container
                       Container(
                         width: 56,
                         height: 56,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 2),
-                          image: const DecorationImage(
-                            image: AssetImage('assets/images/bruce_lee.png'), // Swap with your actual project asset path
+                          color: AppTheme.primaryDark,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(28),
+                          child: Image.asset(
+                            'assets/images/bruce_lee.png',
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Displays clean, custom initials if the asset is missing
+                              return const Center(
+                                child: Text(
+                                  'BL',
+                                  style: TextStyle(
+                                    color: AppTheme.accentYellow,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'Hello,',
                             style: TextStyle(
@@ -73,7 +93,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ),
                     ],
                   ),
-                  // Notification Alert Bell Ring Wrapper Button
+                  // Notification Alert Bell Button
                   Container(
                     height: 52,
                     width: 52,
@@ -94,7 +114,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               // 2. Financial Metrics Balance & Debt Matrix Layout
               Row(
                 children: [
-                  // Balance Sheet Display Module
+                  // Balance Card
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(16),
@@ -155,7 +175,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ),
                   const SizedBox(width: 16),
 
-                  // Credit Debt Tracking Matrix Module
+                  // Debt Card
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(16),
@@ -232,7 +252,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               _buildShopRowTile('Hakuna Matata Shop', '7,000 + Spent'),
               const SizedBox(height: 24),
 
-              // 4. Financial Audit Transaction Records Line Log
+              // 4. Financial Audit Transaction Records
               const Text(
                 'Recent Transactions',
                 style: TextStyle(
@@ -246,20 +266,15 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               _buildTransactionLogTile('Baba Ester Shop', '19 May, 07:50 AM', '-Ksh 500'),
               _buildTransactionLogTile('Hakuna Matata Shop', '17 May, 08:01 PM', '-Ksh 425'),
               _buildTransactionLogTile('Blessed Shop', '15 May, 06:31 AM', '-Ksh 250'),
-              const SizedBox(height: 100), // Protect content viewing from navigation clearances
+              const SizedBox(height: 100),
             ],
           ),
         ),
       ),
 
-      // 5. Implementing the Extracted Navigation Component Framework
+      // 5. Navigation Component implementation (Using standard, non-opinionated parameters)
       bottomNavigationBar: CustomBottomNavbar(
         currentIndex: _currentBottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _currentBottomNavIndex = index;
-          });
-        },
       ),
     );
   }
