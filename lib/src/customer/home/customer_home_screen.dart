@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/shared_widgets/custom_bottom_navbar.dart';
 import '../../theme/app_theme.dart';
-
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
 
@@ -21,7 +20,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
+      extendBody: true,
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -93,18 +94,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ),
                     ],
                   ),
-                  // Notification Alert Bell Button
-                  Container(
-                    height: 52,
-                    width: 52,
-                    decoration: const BoxDecoration(
-                      color: AppTheme.accentYellow,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.notifications_none_rounded,
-                      color: AppTheme.primaryDark,
-                      size: 28,
+                  // Notification Alert Bell Button Linked to Navigate
+                  InkWell(
+                    onTap: () => Navigator.pushNamed(context, '/notifications'),
+                    borderRadius: BorderRadius.circular(26), // Matches circle clip behavior
+                    child: Container(
+                      height: 52,
+                      width: 52,
+                      decoration: const BoxDecoration(
+                        color: AppTheme.accentYellow,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.notifications_none_rounded,
+                        color: AppTheme.primaryDark,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ],

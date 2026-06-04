@@ -1,3 +1,4 @@
+import 'package:dukahub/src/customer/home/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'src/theme/app_theme.dart';
 import 'src/onboarding/onboarding_screen.dart';
@@ -25,6 +26,7 @@ class DukaHubApp extends StatelessWidget {
       routes: {
         '/onboarding': (context) => const OnboardingScreen(),
         '/customer-home': (context) => const CustomerHomeScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
         '/shop': (context) => const ShopScreen(),
         '/records': (context) => const RecordsScreen(),
         '/chats': (context) => const ChatsScreen(),

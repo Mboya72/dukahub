@@ -15,6 +15,7 @@ class RecordsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
