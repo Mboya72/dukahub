@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/shared_widgets/custom_bottom_navbar.dart';
 import '../../theme/app_theme.dart';
+
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
 
@@ -11,139 +12,150 @@ class CustomerHomeScreen extends StatefulWidget {
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   bool _showBalance = true;
   bool _showDebt = true;
-
-  // Since this component is now a standalone screen destination driven by
-  // named routes, the selected index on this file is always explicitly 0 (Home).
   final int _currentBottomNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       backgroundColor: AppTheme.background,
-      extendBody: true,
+      extendBody: true, // Allows content scroll visibility under your transparent navbar
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // 1. Profile Header with Image Asset Safety Fallback
+              // 1. Profile Header with Badged Notification Bell
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     children: [
-                      // Circular Profile Avatar Container
                       Container(
-                        width: 56,
-                        height: 56,
-                        decoration: BoxDecoration(
+                        width: 48,
+                        height: 48,
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
                           color: AppTheme.primaryDark,
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(28),
-                          child: Image.asset(
-                            'assets/images/bruce_lee.png',
+                          borderRadius: BorderRadius.circular(24),
+                          child: Image.network(
+                            'https://i.pravatar.cc/150?img=33', // Placeholder matching your avatar image style
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Displays clean, custom initials if the asset is missing
-                              return const Center(
-                                child: Text(
-                                  'BL',
-                                  style: TextStyle(
-                                    color: AppTheme.accentYellow,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              );
-                            },
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.person, color: Colors.white),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      const Column(
+                      const SizedBox(width: 10),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Hello,',
-                            style: TextStyle(
+                            style: textTheme.bodyMedium?.copyWith(
                               color: AppTheme.primaryDark,
-                              fontSize: 28,
+                              fontSize: 15,
                               fontWeight: FontWeight.w400,
-                              height: 1.1,
                             ),
                           ),
                           Text(
                             'Bruce Lee',
-                            style: TextStyle(
+                            style: textTheme.titleLarge?.copyWith(
                               color: AppTheme.primaryDark,
-                              fontSize: 36,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              height: 1.1,
-                              letterSpacing: -0.5,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  // Notification Alert Bell Button Linked to Navigate
-                  InkWell(
-                    onTap: () => Navigator.pushNamed(context, '/notifications'),
-                    borderRadius: BorderRadius.circular(26), // Matches circle clip behavior
-                    child: Container(
-                      height: 52,
-                      width: 52,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.accentYellow,
-                        shape: BoxShape.circle,
+
+                  // Badged Notification Bell
+                  Stack(
+                    clipBehavior: Clip.none, // Prevents any clipping outside the button frame
+                    children: [
+                      InkWell(
+                        onTap: () => Navigator.pushNamed(context, '/notifications'),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          height: 44,
+                          width: 44,
+                          decoration: BoxDecoration(
+                            color: AppTheme.accentYellow,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.notifications_none_rounded,
+                            color: AppTheme.primaryDark,
+                            size: 26,
+                          ),
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.notifications_none_rounded,
-                        color: AppTheme.primaryDark,
-                        size: 28,
+                      Positioned(
+                        top: -4,    // Adjusted out of boundaries safely without clip limits
+                        right: -4,  // Adjusted out of boundaries safely without clip limits
+                        child: IgnorePointer(
+                          child: Container(
+                            height: 18, // Fixed width and height to give a uniform circular box
+                            width: 18,
+                            alignment: Alignment.center, // Keeps the inner digit perfectly centered
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFFF3B30), // System alert red
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Text(
+                              '2',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                height: 1.0, // Forces font canvas line heights not to push text downwards
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
 
-              // 2. Financial Metrics Balance & Debt Matrix Layout
+              // 2. Financial Metrics Cards Grid Panel
               Row(
                 children: [
-                  // Balance Card
+                  // Balance Card Panel Layout
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(16),
-                      height: 150,
+                      padding: const EdgeInsets.all(14),
+                      height: 146,
                       decoration: BoxDecoration(
                         color: AppTheme.primaryDark,
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Current Balance',
-                            style: TextStyle(
-                              color: AppTheme.hintColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                              fontSize: 13,
                             ),
                           ),
                           Text(
                             _showBalance ? 'Ksh 980' : '••••••',
-                            style: const TextStyle(
-                              color: Color(0xFF2ECC71),
+                            style: textTheme.headlineMedium?.copyWith(
+                              color: const Color(0xFF10CE5F), // High-contrast success green match
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -154,22 +166,25 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2ECC71),
+                                  backgroundColor: const Color(0xFF10CE5F),
                                   foregroundColor: AppTheme.primaryDark,
-                                  minimumSize: const Size(70, 36),
+                                  minimumSize: const Size(64, 32),
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  elevation: 0,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text('Add +', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                child: const Text('Add +', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                               ),
                               IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
                                 onPressed: () => setState(() => _showBalance = !_showBalance),
                                 icon: Icon(
                                   _showBalance ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                  color: AppTheme.hintColor,
-                                  size: 20,
+                                  color: Colors.white54,
+                                  size: 18,
                                 ),
                               ),
                             ],
@@ -178,33 +193,32 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
 
-                  // Debt Card
+                  // Debt Card Panel Layout
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(16),
-                      height: 150,
+                      padding: const EdgeInsets.all(14),
+                      height: 146,
                       decoration: BoxDecoration(
                         color: AppTheme.primaryDark,
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Current Debt',
-                            style: TextStyle(
-                              color: AppTheme.hintColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                              fontSize: 13,
                             ),
                           ),
                           Text(
                             _showDebt ? 'Ksh 680' : '••••••',
-                            style: const TextStyle(
-                              color: Color(0xFFE74C3C),
+                            style: textTheme.headlineMedium?.copyWith(
+                              color: const Color(0xFFFF3B30), // High-contrast debt warning red
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -215,22 +229,25 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFE74C3C),
+                                  backgroundColor: const Color(0xFFFF3B30),
                                   foregroundColor: Colors.white,
-                                  minimumSize: const Size(70, 36),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  minimumSize: const Size(64, 32),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  elevation: 0,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text('Pay', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                child: const Text('Pay', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                               ),
                               IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
                                 onPressed: () => setState(() => _showDebt = !_showDebt),
                                 icon: Icon(
                                   _showDebt ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                  color: AppTheme.hintColor,
-                                  size: 20,
+                                  color: Colors.white54,
+                                  size: 18,
                                 ),
                               ),
                             ],
@@ -241,98 +258,219 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
 
-              // 3. Trusted Vendors Stack Layout Section
-              const Text(
-                'Trusted Shops',
-                style: TextStyle(
-                  color: AppTheme.primaryDark,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              // 3. Trusted Shops Horizontal Layout Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Trusted Shops',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: AppTheme.primaryDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        'See all',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: AppTheme.primaryDark,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // Dynamic Horizontal Row of Shop Showcase Cards
+              SizedBox(
+                height: 94,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    return _buildTrustedShopCard(context);
+                  },
                 ),
               ),
-              const SizedBox(height: 12),
-              _buildShopRowTile('Baba Ester Shop', '10,000 + Spent'),
-              _buildShopRowTile('Hakuna Matata Shop', '7,000 + Spent'),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // 4. Financial Audit Transaction Records
-              const Text(
-                'Recent Transactions',
-                style: TextStyle(
-                  color: AppTheme.primaryDark,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              // 4. Financial Audit Transaction Records Layout
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Transactions',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: AppTheme.primaryDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        'See all',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: AppTheme.primaryDark,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
-              _buildTransactionLogTile('Baba Ester Shop', '21 May, 02:01 PM', '-Ksh 300'),
-              _buildTransactionLogTile('Baba Ester Shop', '19 May, 07:50 AM', '-Ksh 500'),
-              _buildTransactionLogTile('Hakuna Matata Shop', '17 May, 08:01 PM', '-Ksh 425'),
-              _buildTransactionLogTile('Blessed Shop', '15 May, 06:31 AM', '-Ksh 250'),
-              const SizedBox(height: 100),
+              const SizedBox(height: 4),
+
+              _buildTransactionListTile(context, 'Baba Ester\'s Shop', 'Paid by you • Nov 13', 'Ksh 300', 'Ksh 500', isDebtText: true),
+              _buildTransactionListTile(context, 'Blessed Shop', 'Change • Nov 14', 'Ksh 95', 'Ksh 500', isDebtText: false),
+              _buildTransactionListTile(context, 'Blessed Shop', 'Paid by you • Nov 14', 'Ksh 160', 'Ksh 500', isDebtText: true),
+
+              const SizedBox(height: 100), // Prevents cutoff by navigation row margins
             ],
           ),
         ),
       ),
-
-      // 5. Navigation Component implementation (Using standard, non-opinionated parameters)
       bottomNavigationBar: CustomBottomNavbar(
         currentIndex: _currentBottomNavIndex,
       ),
     );
   }
 
-  Widget _buildShopRowTile(String title, String spentAmt) {
+  Widget _buildTrustedShopCard(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      width: 250,
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 48,
-                width: 48,
-                decoration: BoxDecoration(
-                  color: AppTheme.accentYellow.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.storefront_rounded, color: AppTheme.primaryDark),
+          Container(
+            height: 72,
+            width: 72,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.background,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=150', // Storefront matching reference layout
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.storefront, color: AppTheme.hintColor),
               ),
-              const SizedBox(width: 14),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: AppTheme.primaryDark,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppTheme.background,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Shop',
+                    style: textTheme.labelSmall?.copyWith(
+                      color: AppTheme.primaryDark,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  'Baba Ester\'s Shop',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: AppTheme.primaryDark,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined, size: 12, color: AppTheme.primaryDark),
+                    const SizedBox(width: 2),
+                    Expanded(
+                      child: Text(
+                        'Nairobi, Lucky summer',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.bodySmall?.copyWith(color: AppTheme.primaryDark, fontSize: 11),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.star, size: 12, color: Colors.orange),
+                  const SizedBox(width: 1),
+                  Text(
+                    '4.6',
+                    style: textTheme.bodySmall?.copyWith(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 11),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '(1,099)',
+                style: textTheme.bodySmall?.copyWith(color: AppTheme.hintColor, fontSize: 10),
               ),
             ],
-          ),
-          Text(
-            spentAmt,
-            style: const TextStyle(
-              color: Color(0xFF2ECC71),
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTransactionLogTile(String shopName, String timestamp, String amount) {
+  Widget _buildTransactionListTile(
+      BuildContext context,
+      String shopName,
+      String subtitle,
+      String primaryAmt,
+      String secondaryAmt,
+      {required bool isDebtText}
+      ) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -344,30 +482,30 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           Row(
             children: [
               Container(
-                height: 48,
-                width: 48,
+                height: 40,
+                width: 40,
                 decoration: BoxDecoration(
-                  color: AppTheme.accentYellow.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.background,
+                  shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.storefront_rounded, color: AppTheme.primaryDark),
+                child: const Icon(Icons.arrow_upward_rounded, color: AppTheme.primaryDark, size: 20),
               ),
-              const SizedBox(width: 14),
+              const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     shopName,
-                    style: const TextStyle(
+                    style: textTheme.bodyLarge?.copyWith(
                       color: AppTheme.primaryDark,
-                      fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    timestamp,
-                    style: const TextStyle(
+                    subtitle,
+                    style: textTheme.bodySmall?.copyWith(
                       color: AppTheme.hintColor,
                       fontSize: 12,
                     ),
@@ -376,13 +514,26 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               ),
             ],
           ),
-          Text(
-            amount,
-            style: const TextStyle(
-              color: Color(0xFFE74C3C),
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                primaryAmt,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: isDebtText ? const Color(0xFFFF3B30) : const Color(0xFF10CE5F),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                secondaryAmt,
+                style: textTheme.bodySmall?.copyWith(
+                  color: AppTheme.hintColor,
+                  fontSize: 11,
+                ),
+              ),
+            ],
           ),
         ],
       ),
