@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../src/theme/app_theme.dart';
 
 class CustomBottomNavbar extends StatelessWidget {
@@ -12,30 +13,29 @@ class CustomBottomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // This ensures the root canvas container layer is completely clear
       color: Colors.transparent,
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 8),
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
       child: Container(
-        height: 66,
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white, // The actual visible rounded pill background
-          borderRadius: BorderRadius.circular(33),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(36),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryDark.withValues(alpha: 0.08),
+              color: AppTheme.primaryDark.withAlpha((0.08 * 255).toInt()),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildNavItem(context, 0, Icons.home_outlined, Icons.home, 'Home', '/customer-home'),
-            _buildNavItem(context, 1, Icons.shopping_basket_outlined, Icons.shopping_basket, 'Shop', '/shop'),
-            _buildNavItem(context, 2, Icons.description_outlined, Icons.description, 'Records', '/records'),
-            _buildNavItem(context, 3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chats', '/chats'),
-            _buildNavItem(context, 4, Icons.person_outline, Icons.person, 'Profile', '/profile'),
+            _buildNavItem(context, 0, 'assets/icons/home.svg', 'Home', '/customer-home'),
+            _buildNavItem(context, 1, 'assets/icons/shop.svg', 'Shop', '/shop'),
+            _buildNavItem(context, 2, 'assets/icons/records.svg', 'Records', '/records'),
+            _buildNavItem(context, 3, 'assets/icons/messages.svg', 'Chats', '/chats'),
+            _buildNavItem(context, 4, 'assets/icons/profile.svg', 'Profile', '/profile'),
           ],
         ),
       ),
@@ -45,8 +45,7 @@ class CustomBottomNavbar extends StatelessWidget {
   Widget _buildNavItem(
       BuildContext context,
       int index,
-      IconData unselectedIcon,
-      IconData selectedIcon,
+      String svgPath,
       String label,
       String routeName,
       ) {
@@ -62,17 +61,30 @@ class CustomBottomNavbar extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(
+          horizontal: isSelected ? 18 : 10,
+          vertical: 14,
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.accentYellow : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(28),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              isSelected ? selectedIcon : unselectedIcon,
-              color: AppTheme.primaryDark,
-              size: 22,
+            // AnimatedContainer automatically smooths the size transition
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              // FIXED HERE: Selected icon is explicitly smaller (18) than non-selected ones (24)
+              height: isSelected ? 18 : 24,
+              child: SvgPicture.asset(
+                svgPath,
+                fit: BoxFit.contain,
+                colorFilter: const ColorFilter.mode(
+                  AppTheme.primaryDark,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
             if (isSelected) ...[
               const SizedBox(width: 6),
@@ -81,7 +93,7 @@ class CustomBottomNavbar extends StatelessWidget {
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppTheme.primaryDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 16,
                 ),
               ),
             ],

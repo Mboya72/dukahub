@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.0
   google_fonts: ^8.1.0
+  flutter_svg: ^2.0.10
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +47,11 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/home.svg
+    - assets/icons/shop.svg
+    - assets/icons/records.svg
+    - assets/icons/messages.svg
+    - assets/icons/profile.svg
 
   fonts:
     - family: Urbanist
