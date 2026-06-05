@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/shared_widgets/custom_bottom_navbar.dart';
 import '../../theme/app_theme.dart';
+import 'package:flutter/services.dart';
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -35,6 +36,15 @@ class _ChatsScreenState extends State<ChatsScreen> with SingleTickerProviderStat
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
+        // FIXED HERE: Forces status bar icons to contrast cleanly on a light background
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark, // Android: dark grey icons
+          statusBarBrightness: Brightness.light, // iOS: dark grey icons
+          systemNavigationBarColor: AppTheme.background,
+          systemNavigationBarDividerColor: AppTheme.background,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
         title: Padding(
           padding: const EdgeInsets.only(left: 4, top: 12),
           child: Text(
@@ -104,13 +114,17 @@ class _ChatsScreenState extends State<ChatsScreen> with SingleTickerProviderStat
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildMessageList(context),
-          _buildMessageList(context), // Dynamic unread filter logic can plug here
-          _buildMessageList(context), // Dynamic read filter logic can plug here
-        ],
+      body: SafeArea(
+        top: false,
+        bottom: true, // FIXED HERE: Ensures lists safely pad above navigation gesture zones
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            _buildMessageList(context),
+            _buildMessageList(context), // Dynamic unread filter logic can plug here
+            _buildMessageList(context), // Dynamic read filter logic can plug here
+          ],
+        ),
       ),
       bottomNavigationBar: const CustomBottomNavbar(
         currentIndex: 3,
@@ -173,7 +187,7 @@ class _ChatsScreenState extends State<ChatsScreen> with SingleTickerProviderStat
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.primaryDark.withOpacity(0.8),
+                      color: AppTheme.primaryDark.withAlpha((0.8 * 255).toInt()),
                       fontWeight: FontWeight.w500,
                       fontSize: 13.5,
                     ),

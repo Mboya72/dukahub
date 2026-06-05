@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // REQUIRED for AnnotatedRegion & SystemUiOverlayStyle
 import '../auth/login_screen.dart';
 import '../auth/signup_screen.dart';
 import '../theme/app_theme.dart'; // Points directly to your single theme file workspace
@@ -122,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 const SizedBox(height: 16),
 
-// Customer Profile Mode Card Item
+                // Customer Profile Mode Card Item
                 _buildRoleCard(
                   context: context,
                   title: 'I am a Customer',
@@ -231,148 +232,158 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                itemCount: _onboardingData.length,
-                itemBuilder: (context, index) {
-                  final item = _onboardingData[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 60),
-                        Expanded(
-                          flex: 5,
-                          child: Center(
-                            child: Image.asset(
-                              item['image']!,
-                              fit: BoxFit.contain,
+    // FIXED: Forces the system bar to dynamically use your background color with a clean, light surface format
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        systemNavigationBarColor: AppTheme.background, // Match your app background hex directly
+        systemNavigationBarDividerColor: AppTheme.background,
+        systemNavigationBarIconBrightness: Brightness.dark, // Keeps gesture indicator pill dark grey
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: AppTheme.background,
+        body: SafeArea(
+          top: false,
+          bottom: true, // FIXED: Pushes elements up to rest right against your newly stylized matching bar layer
+          child: Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  itemCount: _onboardingData.length,
+                  itemBuilder: (context, index) {
+                    final item = _onboardingData[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 60),
+                          Expanded(
+                            flex: 5,
+                            child: Center(
+                              child: Image.asset(
+                                item['image']!,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 40),
-                        Expanded(
-                          flex: 4,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item['title']!,
-                                style: const TextStyle(
-                                  color: AppTheme.primaryDark,
-                                  fontSize: 42,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.1,
-                                  letterSpacing: -0.5,
+                          const SizedBox(height: 40),
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['title']!,
+                                  style: const TextStyle(
+                                    color: AppTheme.primaryDark,
+                                    fontSize: 42,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.1,
+                                    letterSpacing: -0.5,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                item['description']!,
-                                style: const TextStyle(
-                                  color: AppTheme.primaryDark,
-                                  fontSize: 16,
-                                  height: 1.4,
-                                  fontWeight: FontWeight.w400,
+                                const SizedBox(height: 20),
+                                Text(
+                                  item['description']!,
+                                  style: const TextStyle(
+                                    color: AppTheme.primaryDark,
+                                    fontSize: 16,
+                                    height: 1.4,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28.0, 0, 28.0, 36.0),
-              child: _currentIndex == _onboardingData.length - 1
-                  ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: () => _showRoleSelectionPopup(context),
-                      child: const Text('Get Started'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      // Completely bypasses role popup selection rules and opens the login frame directly
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const LoginScreen(selectedRole: '',)),
-                      );
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.primaryDark,
-                          fontFamily: 'Urbanist',
-                        ),
-                        children: [
-                          TextSpan(text: 'You have an Account? '),
-                          TextSpan(
-                            text: 'Login',
-                            style: TextStyle(
-                              color: AppTheme.primaryDark,
-                              fontWeight: FontWeight.bold,
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
-              )
-                  : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => _showRoleSelectionPopup(context),
-                    child: const Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: AppTheme.primaryDark,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: _nextPage,
-                    child: Container(
-                      width: 56,
-                      height: 56,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.accentYellow,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward,
-                        color: AppTheme.primaryDark,
-                        size: 26,
-                      ),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(28.0, 0, 28.0, 24.0), // Rebalanced for ideal safe spacing
+                child: _currentIndex == _onboardingData.length - 1
+                    ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () => _showRoleSelectionPopup(context),
+                        child: const Text('Get Started'),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const LoginScreen(selectedRole: '')),
+                        );
+                      },
+                      child: RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryDark,
+                            fontFamily: 'Urbanist',
+                          ),
+                          children: [
+                            TextSpan(text: 'You have an Account? '),
+                            TextSpan(
+                              text: 'Login',
+                              style: TextStyle(
+                                color: AppTheme.primaryDark,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _showRoleSelectionPopup(context),
+                      child: const Text(
+                        'Skip',
+                        style: TextStyle(
+                          color: AppTheme.primaryDark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _nextPage,
+                      child: Container(
+                        width: 56,
+                        height: 56,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.accentYellow,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward,
+                          color: AppTheme.primaryDark,
+                          size: 26,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

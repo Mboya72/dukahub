@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/shared_widgets/custom_bottom_navbar.dart';
 import '../../theme/app_theme.dart';
+import 'package:flutter/services.dart';
 
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});
@@ -11,7 +12,24 @@ class ShopScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
+      extendBody: true,
+      appBar: AppBar(
+        toolbarHeight: 0, // Keeps the visual app bar hidden while handling system layers
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        // FIXED HERE: Forces status bar icons to contrast cleanly on a light background
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark, // Android: dark grey icons
+          statusBarBrightness: Brightness.light, // iOS: dark grey icons
+          systemNavigationBarColor: AppTheme.background,
+          systemNavigationBarDividerColor: AppTheme.background,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+      ),
       body: SafeArea(
+        top: false, // Ensures screen items can comfortably layout below standard notches
+        bottom: true, // FIXED HERE: Safely keeps content clear of the device navigation indicator
         child: Column(
           children: [
             const SizedBox(height: 16),
@@ -144,7 +162,8 @@ class ShopScreen extends StatelessWidget {
                             child: Icon(
                               Icons.shopping_cart_rounded,
                               size: 100,
-                              color: Colors.white.withValues(alpha: 0.25),
+                              // FIXED HERE: Replaced with safe backwards-compatible alpha integer mapping
+                              color: Colors.white.withAlpha((0.25 * 255).toInt()),
                             ),
                           ),
                         ],
