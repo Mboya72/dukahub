@@ -5,6 +5,7 @@ import '../../theme/app_theme.dart';
 import 'add_balance_screen.dart';
 import 'all_transactions_screen.dart';
 import 'pay_debt_screen.dart';
+import 'all_trusted_shops_screen.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
@@ -292,7 +293,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Optional: Navigate to a dedicated Trusted Shops screen here
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AllTrustedShopsScreen()),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
