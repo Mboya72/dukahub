@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/shared_widgets/custom_bottom_navbar.dart';
 import '../../theme/app_theme.dart';
 import 'package:flutter/services.dart';
+import 'product_details_screen.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});

@@ -237,7 +237,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             backgroundColor: AppTheme.accentYellow,
                             foregroundColor: AppTheme.primaryDark,
                             elevation: 0,
-                            height: 48,
+                            minimumSize: const Size(double.infinity, 48),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(24),
                             ),
