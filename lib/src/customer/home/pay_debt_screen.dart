@@ -48,7 +48,7 @@ class PayDebtScreen extends StatelessWidget {
                     style: TextStyle(color: Color(0xFFFF3B30), fontSize: 36, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                  Divider(color: Colors.white.withOpacity(0.15)),
+                  Divider(color: Colors.white.withValues(alpha: 0.15)),
                   const SizedBox(height: 8),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
